@@ -1,0 +1,19 @@
+{
+  "accepts": ["id"],
+  "classes": ["SequenceFeature"],
+  "depends": ["ExpressionValue"],
+  "columnMapping": {
+    "Gene": {
+      "id": "primaryIdentifier"
+    }
+  },
+  "files" : {
+    "css" : "dist/style.css",
+    "js" : "dist/bundle.js"
+  },
+  "toolName" : {
+    "human" :"Bluegenes Expression Heatmap",
+    "cljs" :"bluegenesExpressionHeatmap"    
+  },
+  "version": 2
+}

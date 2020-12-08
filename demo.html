@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>
+            Bluegenes Expression Heatmap
+        </title>
+
+        <!-- You can assume imjs is on the window.  -->
+        <script src="node_modules/imjs/dist/im.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+
+        <!-- These are styles that will be inherited from bluegenes -->
+        <!-- <link rel="stylesheet" href="css/site.css"> -->
+
+
+        <!-- These are the styles YOU implement in src/style.less -->
+        <link rel="stylesheet" href="dist/style.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+        <script>
+         var socket = io("http://localhost:3457");
+         socket.on('reload', function(){
+	     document.location.reload();
+         });
+        </script>
+        </script>
+    </head>
+    <body>
+        <div class="bluegenesExpressionHeatmap main-container" id='visualizer' />
+        <script>
+         window.onload = function() {
+             // The element to attach the viewer to. Must be an existing DOM element
+             var elem = document.getElementById('visualizer');
+             // InterMine service, including URL and token.
+    	     var imURL = {
+    	         root: 'https://mines.legumeinfo.org/beanmine'
+    	         //could include token here too if we had one
+    	     };
+    	     // this is an example of data that could be passed to this tool be BlueGenes
+             // in reality (outside the demo) this would be dynamic and not hard-coded
+             // to an ID.
+             var dataToInitialiseToolWith = {
+	         SequenceFeature: {
+	             class: 'SequenceFeature',
+	             format: 'id',
+                     // an array of BeanMine genes with expression
+	             value: [9051882,9812917,9765710,9057541]
+	         }
+             };
+    	     var toolState = {}; //to be confirmed how we use this.
+             // THIS LINE IS THE IMPORTANT BIT. YOU SHOULDN'T NEED TO EDIT IT
+             // the method signature should match the signature in src/index.js
+             $.ajax('config.json').then(function(config) {
+    	         bluegenesExpressionHeatmap.main(
+    	             elem,
+	             imURL,
+		     dataToInitialiseToolWith,
+		     toolState,
+		     config,
+	         );
+    	     });
+         };
+        </script>
+        <script src="dist/bundle.js"></script>
+    </body>
+</html>
