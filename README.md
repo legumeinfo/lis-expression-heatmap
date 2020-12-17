@@ -48,5 +48,3 @@ To run a development build of the project at http://localhost:3456
 ```bash
 npm run dev
 ```
-
-

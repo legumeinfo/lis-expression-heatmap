@@ -2,7 +2,7 @@
   "name": "@intermine/bluegenes-expression-heatmap",
   "version": "2.0.0",
   "main": "src/index.js",
-  "description": "Displays a bar chart of expression versus sample on a gene report page.",
+  "description": "Displays a heat map of expression versus gene and sample on a gene list report.",
   "homepage": "http://www.intermine.org",
   "repository": {
     "type": "git",
