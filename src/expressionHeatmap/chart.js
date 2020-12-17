@@ -1,101 +1,123 @@
 import React from 'react';
-import Chart from 'chart.js';
+import { Chart, Tooltip, CategoryScale, LinearScale, Title } from 'chart.js';
+import { color } from 'chart.js/helpers';
+import { Matrix, MatrixController } from 'chartjs-chart-matrix';
+Chart.register(Tooltip, CategoryScale, LinearScale, Title, Matrix, MatrixController);
 
 class ExpressionHeatmap extends React.Component {
+    constructor(props) {
+	super(props);
+    }
+
     componentDidMount() {
-	const { chartData, dataOptions } = this.props;
-	if (!chartData) return;
-	this.chart = new Chart(this.graph, {
-	    type: 'horizontalBar',
+        const { chartData, samples, features, dataOptions } = this.props;
+        this.chart = new Chart(this.graph, {
+            type: 'matrix',
 	    data: {
-		labels: chartData.sampleNames,
-		datasets: [
-		    {
-			label: chartData.features[0],
-			data: chartData.values,
-			backgroundColor: '#373',
-			borderWidth: 2
+		datasets: [{
+		    label: 'My Matrix',
+		    data: chartData,
+		    backgroundColor: function(context) {
+		        const value = context.dataset.data[context.dataIndex].v;
+                        let alpha = Math.max(value/1000, 1.0);
+                        if (dataOptions.scale != 'linear') {
+                            alpha = alpha = Math.log10(value) / 4;
+                        }
+	                return color('green').alpha(alpha).rgbString();
+		    },
+		    width: function(context) {
+		        const a = context.chart.chartArea;
+		        if (!a) {
+		            return 0;
+		        }
+		        return (a.right - a.left) / samples.length;
+		    },
+		    height: function(context) {
+		        const a = context.chart.chartArea;
+		        if (!a) {
+		            return 0;
+		        }
+		        return (a.bottom - a.top) / features.length;
 		    }
-		]
+		}]
 	    },
 	    options: {
-		title: {
-		    text: 'Expression by Sample',
-		    display: true,
-		    fontSize: 18,
-		    position: 'top',
-		    fontStyle: 'bold',
-		    fontColor: '#000'
-		},
-		// tooltips: {
-		//     callbacks: {
-		// 	label(tooltipItem) {
-		// 	    return chartData.hoverTexts[tooltipItem.index];
-		// 	}
-		//     },
-		//     backgroundColor: '#ffffff',
-		//     bodyFontColor: '#000000',
-		//     titleFontColor: '#000000',
-		//     titleFontSize: 16,
-		//     bodyFontSize: 14,
-		//     borderColor: '#dadada',
-		//     borderWidth: 1
-		// },
+		tooltips: {
+		    callbacks: {
+			title() {
+                            return '';
+			},
+			label(context) {
+			    const v = context.dataset.data[context.dataIndex];
+			    return [v.y, v.x, v.v + ' TPM'];
+			}
+		    }
+                },
 		scales: {
-		    yAxes: [
-			{
-			    scaleLabel: {
-				display: true,
-				labelString: 'Sample Name',
-				fontSize: 16,
-				fontStyle: 'italic',
-				fontColor: '#000'
-			    }
+		    x: {
+			type: 'category',
+                        display: true,
+                        scaleLabel: {
+                            display: false
+                        },
+			labels: samples,
+                        offset: true,
+			ticks: {
+			    display: true
+			},
+			gridLines: {
+			    display: false
 			}
-		    ],
-		    xAxes: [
-			{
-			    scaleLabel: {
-				display: true,
-				labelString: 'Expression (TPM)',
-				fontSize: 16,
-				fontStyle: 'italic',
-				fontColor: '#000'
-			    }
+		    },
+		    y: {
+			type: 'category',
+			labels: features,
+			offset: true,
+			ticks: {
+			    display: true
+			},
+			gridLines: {
+			    display: false
 			}
-		    ]
-		},
-		maintainAspectRatio: true,
-		responsive: true
+		    }
+		}
 	    }
-	});
+        });
+        
     }
 
     componentDidUpdate() {
-	const { chartData, dataOptions } = this.props;
-	if (!chartData) return;
-	this.chart.data.labels = chartData.sampleNames;
-	this.chart.data.datasets[0].data =
-	    dataOptions.val === chartData.values;
-	this.chart.data.datasets[0].backgroundColor = '#bbb';
+        const { chartData, samples, features, dataOptions } = this.props;
+	if (chartData.length == 0) return;
+        this.chart.data.datasets[0].data = chartData;
+        this.chart.options.scales.x.labels = samples;
+        this.chart.options.scales.y.labels = features;
+	this.chart.data.datasets[0].height = function(context) {
+	    const a = context.chart.chartArea;
+	    if (!a) {
+		return 0;
+	    }
+	    return (a.bottom - a.top) / features.length;
+	}
 	this.chart.update();
     }
 
     render() {
 	return (
 	    <canvas
-		height={
-		    (this.props.chartData && this.props.chartData.sampleNames.length) > 30
-			? '260px'
-			: ''
-		}
-		className="graph"
-		ref={r => {
-		    this.graph = r;
-		}}
-	    />
-	);
+	    // height={
+	    //     (this.props.features.length > 30)
+	    // 	? '260px'
+	    // 	: ''
+	    // }
+	    className="graph"
+	    ref={r => {
+		this.graph = r;
+	    }}
+	        />
+	)
     }
+
 }
 
 export default ExpressionHeatmap;

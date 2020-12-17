@@ -20,7 +20,7 @@
 
 
         <!-- These are the styles YOU implement in src/style.less -->
-        <link rel="stylesheet" href="dist/style.css">
+        <link rel="stylesheet" href="dist/style.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
         <script>
          var socket = io("http://localhost:3457");
@@ -28,10 +28,9 @@
 	     document.location.reload();
          });
         </script>
-        </script>
     </head>
     <body>
-        <div class="bluegenesExpressionHeatmap main-container" id='visualizer' />
+        <div id="visualizer" class="bluegenesExpressionHeatmap main-container" />
         <script>
          window.onload = function() {
              // The element to attach the viewer to. Must be an existing DOM element

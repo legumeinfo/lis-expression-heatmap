@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+    <head>
+	<title>Matrix Chart on category scale</title>
+        <script src="node_modules/chart.js/dist/chart.js"></script>
+        <script src="node_modules/chartjs-chart-matrix/dist/chartjs-chart-matrix.js"></script>
+    </head>
+    <body>
+	<div id="canvas-holder" style="width:1000px; height:800px; margin:auto;">
+	    <canvas id="chart-area"></canvas>
+	</div>
+
+	<script>
+         const samples = [
+             "Leaf Young",
+             "Leaf 21 DAI",
+             "Stem",
+             "Shoot",
+             "Flower",
+             "Pod Young",
+             "Pod 9cm",
+             "Pod 10cm",
+             "Pod 12 cm",
+             "Seed 7mg",
+             "Seed 50mg",
+             "Seed 140mg",
+             "Root Tip",
+             "Root Young",
+             "Root 21 DAI"
+         ];
+         const features = [
+             "Phvul.001G000100",
+             "Phvul.001G117600",
+             "Phvul.001G108700",
+             "Phvul.001G039200"
+         ];
+         const chartData = [
+             {"x":"Leaf Young","y":"Phvul.001G000100","v":2.45},
+             {"x":"Leaf 21 DAI","y":"Phvul.001G000100","v":0.7},
+             {"x":"Stem","y":"Phvul.001G000100","v":1.8},
+             {"x":"Shoot","y":"Phvul.001G000100","v":2.33},
+             {"x":"Flower","y":"Phvul.001G000100","v":1.56},
+             {"x":"Pod Young","y":"Phvul.001G000100","v":0.76},
+             {"x":"Pod 9cm","y":"Phvul.001G000100","v":1.41},
+             {"x":"Pod 10cm","y":"Phvul.001G000100","v":1.07},
+             {"x":"Pod 12 cm","y":"Phvul.001G000100","v":1.75},
+             {"x":"Seed 7mg","y":"Phvul.001G000100","v":1.53},
+             {"x":"Seed 50mg","y":"Phvul.001G000100","v":1.97},
+             {"x":"Seed 140mg","y":"Phvul.001G000100","v":0.6},
+             {"x":"Root Tip","y":"Phvul.001G000100","v":2.77},
+             {"x":"Root Young","y":"Phvul.001G000100","v":1.11},
+             {"x":"Root 21 DAI","y":"Phvul.001G000100","v":1.03},
+             {"x":"Leaf Young","y":"Phvul.001G117600","v":10.16},
+             {"x":"Leaf 21 DAI","y":"Phvul.001G117600","v":95.01},
+             {"x":"Stem","y":"Phvul.001G117600","v":19.5},
+             {"x":"Shoot","y":"Phvul.001G117600","v":29.4},
+             {"x":"Flower","y":"Phvul.001G117600","v":16.1},
+             {"x":"Pod Young","y":"Phvul.001G117600","v":50.45},
+             {"x":"Pod 9cm","y":"Phvul.001G117600","v":29.37},
+             {"x":"Pod 10cm","y":"Phvul.001G117600","v":54.34},
+             {"x":"Pod 12 cm","y":"Phvul.001G117600","v":6.06},
+             {"x":"Seed 7mg","y":"Phvul.001G117600","v":5.27},
+             {"x":"Seed 50mg","y":"Phvul.001G117600","v":3.17},
+             {"x":"Seed 140mg","y":"Phvul.001G117600","v":1.63},
+             {"x":"Root Tip","y":"Phvul.001G117600","v":2.89},
+             {"x":"Root Young","y":"Phvul.001G117600","v":1.48},
+             {"x":"Root 21 DAI","y":"Phvul.001G117600","v":2.32},
+             {"x":"Leaf Young","y":"Phvul.001G108700","v":796.05},
+             {"x":"Leaf 21 DAI","y":"Phvul.001G108700","v":1227.07},
+             {"x":"Stem","y":"Phvul.001G108700","v":86.63},
+             {"x":"Shoot","y":"Phvul.001G108700","v":129.14},
+             {"x":"Flower","y":"Phvul.001G108700","v":168},
+             {"x":"Pod Young","y":"Phvul.001G108700","v":158.97},
+             {"x":"Pod 9cm","y":"Phvul.001G108700","v":231.17},
+             {"x":"Pod 10cm","y":"Phvul.001G108700","v":38.96},
+             {"x":"Pod 12 cm","y":"Phvul.001G108700","v":52.16},
+             {"x":"Seed 7mg","y":"Phvul.001G108700","v":64.07},
+             {"x":"Seed 50mg","y":"Phvul.001G108700","v":48.83},
+             {"x":"Seed 140mg","y":"Phvul.001G108700","v":20.56},
+             {"x":"Root Tip","y":"Phvul.001G108700","v":8.94},
+             {"x":"Root Young","y":"Phvul.001G108700","v":6.36},
+             {"x":"Root 21 DAI","y":"Phvul.001G108700","v":1.34},
+             {"x":"Leaf Young","y":"Phvul.001G039200","v":2195.53},
+             {"x":"Leaf 21 DAI","y":"Phvul.001G039200","v":3170.7},
+             {"x":"Stem","y":"Phvul.001G039200","v":248.66},
+             {"x":"Shoot","y":"Phvul.001G039200","v":318.15},
+             {"x":"Flower","y":"Phvul.001G039200","v":360.46},
+             {"x":"Pod Young","y":"Phvul.001G039200","v":213.4},
+             {"x":"Pod 9cm","y":"Phvul.001G039200","v":535.17},
+             {"x":"Pod 10cm","y":"Phvul.001G039200","v":82.87},
+             {"x":"Pod 12 cm","y":"Phvul.001G039200","v":260.99},
+             {"x":"Seed 7mg","y":"Phvul.001G039200","v":84.02},
+             {"x":"Seed 50mg","y":"Phvul.001G039200","v":32.46},
+             {"x":"Seed 140mg","y":"Phvul.001G039200","v":14.88},
+             {"x":"Root Tip","y":"Phvul.001G039200","v":4.8},
+             {"x":"Root Young","y":"Phvul.001G039200","v":34.54},
+             {"x":"Root 21 DAI","y":"Phvul.001G039200","v":2.97}
+         ];
+
+	 const ctx = document.getElementById('chart-area').getContext('2d');
+	 window.myMatrix = new Chart(ctx, {
+	     type: 'matrix',
+	     data: {
+		 datasets: [{
+		     label: 'My Matrix',
+		     data: chartData,
+		     backgroundColor(context) {
+			 const value = context.dataset.data[context.dataIndex].v;
+			 const alpha = Math.log10(value) / 4;
+			 return Chart.helpers.color('green').alpha(alpha).rgbString();
+		     },
+		     width(context) {
+			 const a = context.chart.chartArea;
+			 if (!a) {
+			     return 0;
+			 }
+			 return (a.right - a.left) / samples.length;
+		     },
+		     height(context) {
+			 const a = context.chart.chartArea;
+			 if (!a) {
+			     return 0;
+			 }
+			 return (a.bottom - a.top) / features.length;
+		     }
+		 }]
+	     },
+	     options: {
+		 legend: {
+		     display: false
+		 },
+		 tooltips: {
+		     callbacks: {
+			 title() {
+                             return '';
+			 },
+			 label(context) {
+			     const v = context.dataset.data[context.dataIndex];
+			     return [v.y, v.x, v.v];
+			 }
+		     }
+		 },
+		 scales: {
+		     x: {
+			 type: 'category',
+			 labels: samples,
+                         offset: true,
+			 ticks: {
+			     display: true
+			 },
+			 gridLines: {
+			     display: false
+			 }
+		     },
+		     y: {
+			 type: 'category',
+			 labels: features,
+			 offset: true,
+			 ticks: {
+			     display: true
+			 },
+			 gridLines: {
+			     display: false
+			 }
+		     }
+		 }
+	     }
+	 });
+	</script>
+    </body>
+</html>
