@@ -1,5 +1,5 @@
 {
-  "accepts": ["id"],
+  "accepts": ["ids"],
   "classes": ["SequenceFeature"],
   "depends": ["ExpressionValue"],
   "columnMapping": {
@@ -12,7 +12,7 @@
     "js" : "dist/bundle.js"
   },
   "toolName" : {
-    "human" :"Bluegenes Expression Heatmap",
+    "human" :"BlueGenes Expression Heatmap",
     "cljs" :"bluegenesExpressionHeatmap"    
   },
   "version": 2
