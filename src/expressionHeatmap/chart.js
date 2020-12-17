@@ -11,6 +11,7 @@ class ExpressionHeatmap extends React.Component {
 
     componentDidMount() {
         const { chartData, samples, features, dataOptions } = this.props;
+        Chart.defaults.font.size = 16;
         this.chart = new Chart(this.graph, {
             type: 'matrix',
 	    data: {
@@ -39,7 +40,9 @@ class ExpressionHeatmap extends React.Component {
 		        }
 		        return (a.bottom - a.top) / features.length;
 		    }
-		}]
+		}],
+                xLabels: samples,
+                yLabels: features
 	    },
 	    options: {
 		tooltips: {
@@ -60,10 +63,13 @@ class ExpressionHeatmap extends React.Component {
                         scaleLabel: {
                             display: false
                         },
-			labels: samples,
                         offset: true,
+                        autoSkip: false,
 			ticks: {
-			    display: true
+			    display: true,
+                            font: {
+                                size: 16
+                            }
 			},
 			gridLines: {
 			    display: false
@@ -71,10 +77,13 @@ class ExpressionHeatmap extends React.Component {
 		    },
 		    y: {
 			type: 'category',
-			labels: features,
 			offset: true,
+                        autoSkip: false,
 			ticks: {
-			    display: true
+			    display: true,
+                            font: {
+                                size: 8
+                            }
 			},
 			gridLines: {
 			    display: false
@@ -90,8 +99,9 @@ class ExpressionHeatmap extends React.Component {
         const { chartData, samples, features, dataOptions } = this.props;
 	if (chartData.length == 0) return;
         this.chart.data.datasets[0].data = chartData;
-        this.chart.options.scales.x.labels = samples;
-        this.chart.options.scales.y.labels = features;
+        this.chart.data.xLabels = samples;
+        this.chart.data.yLabels = features;
+        this.chart.options.scales.y.ticks.font.size = Math.min(Math.max(400/features.length, 8), 16);
 	this.chart.data.datasets[0].height = function(context) {
 	    const a = context.chart.chartArea;
 	    if (!a) {

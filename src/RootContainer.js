@@ -64,7 +64,8 @@ class RootContainer extends React.Component {
 	        .catch(() =>
 		       this.setState({
                            error: 'No Expression Data Found!'
-                       }));
+                       })
+                      );
         }
     }
     
@@ -72,9 +73,9 @@ class RootContainer extends React.Component {
     }
 
     render() {
-	if (this.state.error) {
-	    return <div className="rootContainer error">{this.state.error}</div>;
-	}
+	// if (this.state.error) {
+	//     return <div className="rootContainer error">{this.state.error}</div>;
+	// }
 
         if (!Array.isArray(this.props.entity.value)) {
             return <div></div>;
