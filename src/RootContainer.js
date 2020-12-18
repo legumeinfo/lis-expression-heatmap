@@ -15,9 +15,6 @@ class RootContainer extends React.Component {
 	    expressionHeatmapData: [],
             expressionSamples: [],
             expressionFeatures: [],
-	    expressionOptions: {
-		scale: 'log'  // log or linear
-	    },
 	    error: null
 	};
     }
@@ -34,52 +31,39 @@ class RootContainer extends React.Component {
 	    serviceUrl
 	} = this.props;
 
-        // don't show heatmap for single features (report pages)
-        if (!Array.isArray(featureId)) return;
-
 	// fetch data for expression heatmap
-        for (var index = 0; index<featureId.length; index++) {
-	    queryExpressionData(featureId[index], serviceUrl)
-	        .then(response => {
-                    // samples should be the same for each feature
-                    const sampleData = getExpressionSamples(response);
-                    this.setState((state) => ({
-                        expressionSamples: sampleData
-                    }));
-                    // concat this feature
-                    const featureData = getExpressionFeatures(response);
-                    this.setState((state) => ({
-                        expressionFeatures: this.state.expressionFeatures.concat(featureData)
-                    }));
-                    // get the data for this feature
-		    const chartData = getExpressionHeatmapData(
-		        response,
-		        this.state.expressionOptions
-		    );
-                    // concat the data
-                    this.setState((state) => ({
-	                expressionHeatmapData: this.state.expressionHeatmapData.concat(chartData)
-	            }));
-	        })
-	        .catch(() =>
-		       this.setState({
-                           error: 'No Expression Data Found!'
-                       })
-                      );
-        }
+	queryExpressionData(featureId, serviceUrl)
+	    .then(response => {
+                // samples should be the same for each feature
+                const sampleData = getExpressionSamples(response);
+                this.setState((state) => ({
+                    expressionSamples: sampleData
+                }));
+                // concat this feature
+                const featureData = getExpressionFeatures(response);
+                this.setState((state) => ({
+                    expressionFeatures: featureData
+                }));
+                // get the data for this feature
+		const chartData = getExpressionHeatmapData(response);
+                this.setState((state) => ({
+	            expressionHeatmapData: chartData
+	        }));
+	    })
+	    .catch(() =>
+		   this.setState({
+                       error: 'Error querying expression data.'
+                   })
+                  );
     }
     
     componentWillUnmount() {
     }
 
     render() {
-	// if (this.state.error) {
-	//     return <div className="rootContainer error">{this.state.error}</div>;
-	// }
-
-        if (!Array.isArray(this.props.entity.value)) {
-            return <div></div>;
-        }
+	if (this.state.error) {
+	    return <div className="rootContainer error">{this.state.error}</div>;
+	}
 
 	return (
 	    <div className="rootContainer">
@@ -89,7 +73,6 @@ class RootContainer extends React.Component {
 	            chartData={this.state.expressionHeatmapData}
                     samples={this.state.expressionSamples}
                     features={this.state.expressionFeatures}
-	            dataOptions={this.state.expressionOptions}
 	            />
                         </>
 	        ) : (

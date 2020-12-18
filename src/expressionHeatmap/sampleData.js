@@ -1,4 +1,5 @@
 // getExpressionSamples in RootContainer.js
+// return unique sample names
 function getSampleData(results) {
     const sampleData = [];
 

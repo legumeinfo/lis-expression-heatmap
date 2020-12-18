@@ -10,8 +10,7 @@ class ExpressionHeatmap extends React.Component {
     }
 
     componentDidMount() {
-        const { chartData, samples, features, dataOptions } = this.props;
-        Chart.defaults.font.size = 16;
+        const { chartData, samples, features } = this.props;
         this.chart = new Chart(this.graph, {
             type: 'matrix',
 	    data: {
@@ -20,10 +19,7 @@ class ExpressionHeatmap extends React.Component {
 		    data: chartData,
 		    backgroundColor: function(context) {
 		        const value = context.dataset.data[context.dataIndex].v;
-                        let alpha = Math.max(value/1000, 1.0);
-                        if (dataOptions.scale != 'linear') {
-                            alpha = alpha = Math.log10(value) / 4;
-                        }
+                        let alpha = Math.log10(value) / 4;
 	                return color('green').alpha(alpha).rgbString();
 		    },
 		    width: function(context) {
@@ -82,7 +78,7 @@ class ExpressionHeatmap extends React.Component {
 			ticks: {
 			    display: true,
                             font: {
-                                size: 8
+                                size: Math.min(Math.max(400/features.length, 8), 16)
                             }
 			},
 			gridLines: {
@@ -96,7 +92,7 @@ class ExpressionHeatmap extends React.Component {
     }
 
     componentDidUpdate() {
-        const { chartData, samples, features, dataOptions } = this.props;
+        const { chartData, samples, features } = this.props;
 	if (chartData.length == 0) return;
         this.chart.data.datasets[0].data = chartData;
         this.chart.data.xLabels = samples;

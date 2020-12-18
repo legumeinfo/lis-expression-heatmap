@@ -1,4 +1,5 @@
 // getExpressionFeatures in RootContainer.js
+// return unique featureIds
 function getFeatureData(results) {
     const featureData = [];
 

@@ -1,6 +1,6 @@
 // getExpressionHeatmapData in RootContainer.js
-function getChartData(results, dataOptions) {
-    const { scale } = dataOptions;
+// return x, y, v records with x=sample, y=feature, v=value
+function getChartData(results) {
 
     // // sort according to sample number
     // results.sort((r1, r2) => {
@@ -13,8 +13,6 @@ function getChartData(results, dataOptions) {
     const chartData = [];
 
     results.forEach(result => {
-	// scale value acc to dataOptions - log / linear
-	// const scaleVal = n => (scale === 'log' ? Math.log2(n) : n);
         const item = {
             "x": result.sample.name,
             "y": result.feature.secondaryIdentifier,

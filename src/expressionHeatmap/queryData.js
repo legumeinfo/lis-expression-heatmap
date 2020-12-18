@@ -20,8 +20,8 @@ const featureToExpressionQuery = ({ featureId }) => ({
     where: [
 	{
 	    path: 'feature.id',
-	    op: '=',
-	    value: featureId
+	    op: 'ONE OF',
+	    values: featureId
 	}
     ]
 });
