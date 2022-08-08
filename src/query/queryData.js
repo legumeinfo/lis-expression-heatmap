@@ -1,4 +1,4 @@
-const featureToExpressionQuery = ({ featureId }) => ({
+const pathQuery = ({ featureIds }) => ({
     from: 'ExpressionValue',
     select: [
         'value',
@@ -8,31 +8,30 @@ const featureToExpressionQuery = ({ featureId }) => ({
         'sample.num'
     ],
     orderBy: [
-	{
-	    path: 'sample.num',
-	    direction: 'ASC'
-	},
         {
             path: 'feature.secondaryIdentifier',
             direction: 'ASC'
-        }
+        },
+	{
+	    path: 'sample.num',
+	    direction: 'ASC'
+	}
     ],
     where: [
 	{
 	    path: 'feature.id',
 	    op: 'ONE OF',
-	    values: featureId
+	    values: featureIds
 	}
     ]
 });
 
-// queryExpressionData in RootContainer.js
-function queryData(featureId, serviceUrl, imjsClient = imjs) {
+function queryData(featureIds, serviceUrl, imjsClient = imjs) {
     return new Promise((resolve, reject) => {
 	// eslint-disable-next-line
 	const service = new imjsClient.Service({ root: serviceUrl });
 	service
-	    .records(featureToExpressionQuery({ featureId }))
+	    .records(pathQuery({ featureIds }))
 	    .then(data => {
 		if (data && data.length) {
                     resolve(data);
