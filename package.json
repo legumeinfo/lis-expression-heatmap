@@ -1,5 +1,5 @@
 {
-  "name": "@intermine/lis-expression-heatmap",
+  "name": "legumeinfo/lis-expression-heatmap",
   "version": "2.1.0",
   "main": "src/index.js",
   "description": "Displays a heat map of expression versus gene and sample on a gene list report.",

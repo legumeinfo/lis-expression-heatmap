@@ -16,8 +16,6 @@ function RootContainer({ serviceUrl, entity, config }) {
     const [error, setError] = useState(null);
 
     const featureIds = entity.value;
-
-    console.log(featureIds);
     
     // TIP: useEffect with empty array dependency only runs once!
     useEffect(() => {
