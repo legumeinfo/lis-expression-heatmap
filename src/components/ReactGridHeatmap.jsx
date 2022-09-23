@@ -56,5 +56,3 @@ export function ReactGridHeatmap({ samples, features, data }) {
         </div>
     );
 }
-
-

@@ -1,6 +1,6 @@
 {
   "accepts": ["ids"],
-  "classes": ["SequenceFeature"],
+  "classes": ["Gene"],
   "depends": ["ExpressionValue"],
   "columnMapping": {
     "Gene": {
