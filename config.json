@@ -1,6 +1,6 @@
 {
   "accepts": ["ids"],
-  "classes": ["SequenceFeature"],
+  "classes": ["Gene"],
   "depends": ["ExpressionValue"],
   "columnMapping": {
     "Gene": {
@@ -12,8 +12,8 @@
     "js" : "dist/bundle.js"
   },
   "toolName" : {
-    "human" :"BlueGenes Expression Heatmap",
-    "cljs" :"bluegenesExpressionHeatmap"    
+    "human" :"LIS Expression Heatmap",
+    "cljs" :"lisExpressionHeatmap"    
   },
   "version": 2
 }

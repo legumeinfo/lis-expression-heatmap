@@ -1,0 +1,4 @@
+<query name="" model="genomic" view="ExpressionValue.feature.primaryIdentifier ExpressionValue.feature.id" longDescription="">
+  <constraint path="ExpressionValue.feature" type="Gene"/>
+  <constraint path="ExpressionValue.value" op="&gt;" value="20000"/>
+</query>

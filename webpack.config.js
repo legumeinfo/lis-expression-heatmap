@@ -7,7 +7,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    library: "bluegenesExpressionHeatmap",
+    library: "lisExpressionHeatmap",
     libraryTarget: "var"
   },
   optimization: {

@@ -1,127 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>
-            Bluegenes Expression Heatmap
-        </title>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+      LIS Expression Heatmap
+    </title>
 
-        <!-- You can assume imjs is on the window.  -->
-        <script src="node_modules/imjs/dist/im.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- You can assume imjs is on the window.  -->
+    <script src="node_modules/imjs/dist/im.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
-        <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
 
-        <!-- These are styles that will be inherited from bluegenes -->
-        <!-- <link rel="stylesheet" href="css/site.css"> -->
+    <!-- These are styles that will be inherited from bluegenes -->
+    <!-- <link rel="stylesheet" href="css/site.css"> -->
 
-        <!-- These are the styles YOU implement in src/style.less -->
-        <link rel="stylesheet" href="dist/style.css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-        <script>
-         var socket = io("http://localhost:3457");
-         socket.on('reload', function(){
-	     document.location.reload();
-         });
-        </script>
-    </head>
-    <body>
-        <div id="visualizer" class="bluegenesExpressionHeatmap main-container" />
-        <script>
-         window.onload = function() {
-             // The element to attach the viewer to. Must be an existing DOM element
-             var elem = document.getElementById('visualizer');
-             // InterMine service, including URL and token.
-    	     var imURL = {
-    	         root: 'https://mines.legumeinfo.org/beanmine'
-    	         //could include token here too if we had one
-    	     };
-    	     // this is an example of data that could be passed to this tool be BlueGenes
-             // in reality (outside the demo) this would be dynamic and not hard-coded
-             // to an ID.
-             var dataToInitialiseToolWith = {
-	         SequenceFeature: {
-	             class: 'SequenceFeature',
-	             format: 'id',
-                     // an array of BeanMine genes with expression
-	             value: [
-                         // 9812917,
-                         // 9765710,
-                         // 9057541,
-                         // 9265365,
-                         // 9191672,
-                         // 9841608,
-                         // 9188933,
-                         // 9269079,
-                         // 9723340,
-                         // 9418962,
-                         // 9947442,
-                         // 9716599,
-                         // 9901211,
-                         // 9475539,
-                         // 9084332,
-                         // 9690023,
-                         // 9766933,
-                         // 9680800,
-                         // 9613307,
-                         // 10004866,
-                         // 9537887,
-                         // 9472566,
-                         // 9814294,
-                         // 9491267,
-                         // 9717508,
-                         // 9055978,
-                         // 9759264,
-                         // 9855276,
-                         // 9111678,
-                         // 9306194,
-                         // 9169712,
-                         // 9928717,
-                         9848545,
-                         9271292,
-                         9117918,
-                         9101468,
-                         9612424,
-                         9296674,
-                         9826139,
-                         9090858,
-                         9972442,
-                         9608587,
-                         9133975,
-                         9852255,
-                         9817119,
-                         9783103,
-                         9781794,
-                         9739478,
-                         9836283,
-                         9750641,
-                         9514050,
-                         9089786,
-                         9765976,
-                         9658354,
-                         9929505,
-                         9972436,
-                         9147785
-                     ]
-	         }
-             };
-    	     var toolState = {}; //to be confirmed how we use this.
-             // THIS LINE IS THE IMPORTANT BIT. YOU SHOULDN'T NEED TO EDIT IT
-             // the method signature should match the signature in src/index.js
-             $.ajax('config.json').then(function(config) {
-    	         bluegenesExpressionHeatmap.main(
-    	             elem,
-	             imURL,
-		     dataToInitialiseToolWith,
-		     toolState,
-		     config,
-	         );
-    	     });
-         };
-        </script>
-        <script src="dist/bundle.js"></script>
-    </body>
+    <!-- These are the styles YOU implement in src/style.less -->
+    <link rel="stylesheet" href="dist/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+      var socket = io("http://localhost:3457");
+      socket.on('reload', function(){
+	  document.location.reload();
+      });
+    </script>
+  </head>
+  <body>
+    <div id="visualizer" class="lisExpressionHeatmap main-container" />
+    <script>
+      window.onload = function() {
+          // The element to attach the viewer to. Must be an existing DOM element
+          var elem = document.getElementById('visualizer');
+          // InterMine service, including URL and token.
+    	  var imURL = {
+    	      root: 'https://dev.lis.ncgr.org/cicermine'
+    	      //could include token here too if we had one
+    	  };
+    	  // this is an example of data that could be passed to this tool be BlueGenes
+          // in reality (outside the demo) this would be dynamic and not hard-coded
+          // to an ID.
+          var dataToInitialiseToolWith = {
+	      Gene: {
+	          class: 'Gene',
+	          format: 'id',
+                  // an array of CicerMine genes with expression
+	          value: [
+                      1607805,
+                      1638805,
+                      1649440,
+                      1654375,
+                      1656000,
+                      1663665,
+                      1671685,
+                      1674190,
+                      1677890,
+                      1678685,
+                      1684460,
+                      1691110,
+                      1692195,
+                      1692710,
+                      1700025,
+                      1708955,
+                      1712550,
+                      1713415,
+                      1719780,
+                      1720765,
+                      1724950,
+                      1737340
+                  ]
+	      }
+          };
+
+    	  var toolState = {}; //to be confirmed how we use this.
+
+          // THIS LINE IS THE IMPORTANT BIT. YOU SHOULDN'T NEED TO EDIT IT
+          // the method signature should match the signature in src/index.js
+          $.ajax('config.json').then(function(config) {
+    	      lisExpressionHeatmap.main(
+    	          elem,
+	          imURL,
+		  dataToInitialiseToolWith,
+		  toolState,
+		  config,
+	      );
+    	  });
+      };
+    </script>
+    <script src="dist/bundle.js"></script>
+  </body>
 </html>

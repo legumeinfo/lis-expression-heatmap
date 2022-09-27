@@ -1,17 +1,13 @@
 
 ![Logo Intermine](imgs/intermine-300x37.png)
-#  Bluegenes Expression Heatmap
+#  LIS (Bluegenes) Expression Heatmap
 
 BlueGenes Expression Heatmap is a tool made for [BlueGenes](http://bluegenes.apps.intermine.org) following BlueGenes Tool API. It displays gene expression versus sample and gene in a heat map.
-
-# NPM Package
-
-[@intermine/bluegenes-expression-heatmap](https://www.npmjs.com/package/@intermine/bluegenes-expression-heatmap)
 
 ### To set up locally for development
 
 1. Clone the repo
-2. `cd bluegenes-expression-heatmap` and then `npm install` to install dependencies.
+2. `cd lis-expression-heatmap` and then `npm install` to install dependencies.
 
 All of the editable source files for css and js are in `src`. To bundle for prod, run the following commands:
 
