@@ -1,30 +1,28 @@
 /**
  * Return an array of arrays: [features[samples]]
- * Assume results are sorted by feature,sample.
- * result:
- *         {
- *             "sample": {
- *                 "num": 1,
- *                 "objectId": 64000005,
- *                 "class": "ExpressionSample",
- *                 "name": "Leaf Young"
- *             },
- *             "value": 2195.53,
- *             "feature": {
- *                 "secondaryIdentifier": "Phvul.001G039200",
- *                 "objectId": 58559050,
- *                 "class": "Gene"
- *             }
- *         },
  */
-function getChartData(results) {
+// result:
+// {
+//     "sample": {
+//         "source": {
+//             "primaryIdentifier": "CDCFrontier.gnm3.ann1.expr.CDC_Consul.Perilla-Henao_2018"
+//         },
+//         "name": "LR-112A",
+//         "num": 1
+//     },
+//     "value": 0,
+//     "feature": {
+//         "name": "Ca1g261100"
+//     }
+// }
+export default function getChartData(results) {
     const chartData = [];
     var rowData = [];
     var oldFeatureName = "";
     results.forEach(result => {
         const sampleName = result.sample.name;
         const value = Number(result.value);
-        const featureName = result.feature.secondaryIdentifier;
+        const featureName = result.feature.name;
         if (featureName!=oldFeatureName) {
             if (oldFeatureName!="") {
                 chartData.push(rowData);
@@ -38,5 +36,3 @@ function getChartData(results) {
     chartData.push(rowData);
     return chartData;
 }
-
-export default getChartData;

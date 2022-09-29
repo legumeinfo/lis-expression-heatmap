@@ -1,32 +1,7 @@
-const pathQuery = ({ featureIds }) => ({
-    from: 'ExpressionValue',
-    select: [
-        'value',
-        'feature.id',
-	'feature.secondaryIdentifier',
-	'sample.name',
-        'sample.num'
-    ],
-    orderBy: [
-        {
-            path: 'feature.secondaryIdentifier',
-            direction: 'ASC'
-        },
-	{
-	    path: 'sample.num',
-	    direction: 'ASC'
-	}
-    ],
-    where: [
-	{
-	    path: 'feature.id',
-	    op: 'ONE OF',
-	    values: featureIds
-	}
-    ]
-});
-
-function queryData(featureIds, serviceUrl, imjsClient = imjs) {
+/**
+ * Query the expression data for the given feature IDs.
+ */
+export default function queryData(featureIds, serviceUrl, imjsClient = imjs) {
     return new Promise((resolve, reject) => {
 	// eslint-disable-next-line
 	const service = new imjsClient.Service({ root: serviceUrl });
@@ -43,4 +18,27 @@ function queryData(featureIds, serviceUrl, imjsClient = imjs) {
     });
 }
 
-export default queryData;
+// The imjs path query.
+const pathQuery = ({ featureIds }) => ({
+    from: 'ExpressionValue',
+    select: [
+        'value',
+	'feature.name',
+        'sample.num',
+	'sample.name',
+        'sample.source.primaryIdentifier'
+    ],
+    orderBy: [
+        { path: 'sample.source.primaryIdentifier', direction: 'ASC' },
+        { path: 'feature.name', direction: 'ASC' },
+	{ path: 'sample.num', direction: 'ASC' }
+    ],
+    where: [
+	{
+	    path: 'feature.id',
+	    op: 'ONE OF',
+	    values: featureIds
+	}
+    ]
+});
+

@@ -1,10 +1,7 @@
 #!/bin/sh
-
-XML=$1
+QUERY=`cat $1`
 FORMAT=$2
+URL="https://lis.ncgr.org/cicermine/service/query/results"
 
-QUERY=`cat $XML`
-
-curl --data-urlencode query="$QUERY" -d format=$FORMAT https://dev.lis.ncgr.org/cicermine/service/query/results
-
+curl --data-urlencode query="$QUERY" -d format=$2 $URL
 echo ""

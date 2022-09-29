@@ -1,24 +1,27 @@
 <query model="genomic"
-       view="ExpressionValue.value ExpressionValue.feature.id ExpressionValue.feature.secondaryIdentifier ExpressionValue.sample.name ExpressionValue.sample.num"
-       sortOrder="ExpressionValue.feature.secondaryIdentifier ASC ExpressionValue.sample.num ASC">
+       view="ExpressionValue.value
+             ExpressionValue.feature.name
+             ExpressionValue.sample.num
+             ExpressionValue.sample.name"
+       sortOrder="ExpressionValue.feature.name ASC ExpressionValue.sample.num ASC" >
   <constraint path="ExpressionValue.feature.id" op="ONE OF">
-	  <value>5609734</value>
-	  <value>5613519</value>
-	  <value>5614319</value>
-	  <value>5634969</value>
-	  <value>5639599</value>
-	  <value>5650189</value>
-	  <value>5654454</value>
-	  <value>5661694</value>
-	  <value>5663384</value>
-	  <value>5690829</value>
-	  <value>5705669</value>
-	  <value>5707034</value>
-	  <value>5726049</value>
-	  <value>5736574</value>
-	  <value>5737494</value>
-	  <value>5749909</value>
-	  <value>5750829</value>
-	  <value>5751084</value>
+    <value>5609734</value>
+    <value>5613519</value>
+    <value>5614319</value>
+    <value>5634969</value>
+    <value>5639599</value>
+    <value>5650189</value>
+    <value>5654454</value>
+    <value>5661694</value>
+    <value>5663384</value>
+    <value>5690829</value>
+    <value>5705669</value>
+    <value>5707034</value>
+    <value>5726049</value>
+    <value>5736574</value>
+    <value>5737494</value>
+    <value>5749909</value>
+    <value>5750829</value>
+    <value>5751084 </value>
   </constraint>
 </query>

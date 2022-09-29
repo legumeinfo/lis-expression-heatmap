@@ -4,7 +4,7 @@
 function getFeatures(results) {
     const features = [];
     results.forEach(result => {
-        const featureId = result.feature.secondaryIdentifier;
+        const featureId = result.feature.name;
         if (!features.includes(featureId)) {
             features.push(featureId);
         }
