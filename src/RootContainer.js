@@ -59,15 +59,19 @@ export default function RootContainer({ serviceUrl, entity, config }) {
     return (
         <div className="rootContainer">
             {sources && (
-                <select name="sourceIndex" onChange={handleChange} style={{ 'margin-bottom': '5px' }}>
-                    <option key={-1}>Select expression experiment</option>
-                    {sources.map((source,i) => (
-                        <option key={i} value={i}>{source}</option>
-                    ))}
-                </select>
+		<div style={{ 'padding':'10px' }}>
+                    <select name="sourceIndex" onChange={handleChange}>
+                        <option key={-1}>Select expression experiment</option>
+                        {sources.map((source,i) => (
+                            <option key={i} value={i}>{source}</option>
+                        ))}
+                    </select>
+                </div>
             )}
             {(sources && features && source && sampleData && chartData) && (
-                <ReactGridHeatmap features={features} data={chartData} sampleData={sampleData} />
+		<div style={{ 'padding':'10px' }}>
+                    <ReactGridHeatmap features={features} data={chartData} sampleData={sampleData} />
+		</div>
             )}
             {!sources && (
                 <Loader />
