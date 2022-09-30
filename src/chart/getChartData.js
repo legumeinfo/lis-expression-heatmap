@@ -1,38 +1,28 @@
 /**
- * Return an array of arrays: [features[samples]]
- */
-// result:
-// {
-//     "sample": {
-//         "source": {
-//             "primaryIdentifier": "CDCFrontier.gnm3.ann1.expr.CDC_Consul.Perilla-Henao_2018"
-//         },
-//         "name": "LR-112A",
-//         "num": 1
-//     },
-//     "value": 0,
-//     "feature": {
-//         "name": "Ca1g261100"
-//     }
-// }
-export default function getChartData(results) {
+ * Return an array of heatmap data for the desired source.
+*/
+export default function getChartData(results, desiredSource) {
     const chartData = [];
     var rowData = [];
-    var oldFeatureName = "";
+    var currentFeature = "";
     results.forEach(result => {
-        const sampleName = result.sample.name;
         const value = Number(result.value);
-        const featureName = result.feature.name;
-        if (featureName!=oldFeatureName) {
-            if (oldFeatureName!="") {
-                chartData.push(rowData);
-                rowData = [];
+        const num = result.sample.num;
+        const sample = result.sample.name;
+        const source = result.sample.source.primaryIdentifier;
+        const feature = result.feature.name;
+        if (source == desiredSource) {
+            if (feature != currentFeature) {
+                if (currentFeature != "") {
+                    chartData.push(rowData); // previous feature row
+                    rowData = []; // initialize current feature row
+                }
+                currentFeature = feature;
             }
-            oldFeatureName = featureName;
+            rowData.push(value);
         }            
-        rowData.push(value);
     });
-    // last one
+    // push last row
     chartData.push(rowData);
     return chartData;
 }

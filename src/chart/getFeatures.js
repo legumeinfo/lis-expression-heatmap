@@ -1,14 +1,13 @@
 /**
- * Return unique featureIds.
+ * Return unique feature names.
  */
-function getFeatures(results) {
+export default function getFeatures(results) {
     const features = [];
     results.forEach(result => {
-        const featureId = result.feature.name;
-        if (!features.includes(featureId)) {
-            features.push(featureId);
+        const name = result.feature.name;
+        if (!features.includes(name)) {
+            features.push(name);
         }
     });
     return features;
 }
-export default getFeatures;

@@ -3,44 +3,53 @@ import Loader from './common/loader';
 import { useState, useEffect } from 'react';
 
 import queryData from "./query/queryData.js";
-import getChartData from "./chart/getChartData.js";
-import getSamples from "./chart/getSamples.js";
-import getFeatures from "./chart/getFeatures.js";
+
 import getSources from "./chart/getSources.js";
+import getFeatures from "./chart/getFeatures.js";
+import getChartData from "./chart/getChartData.js";
+import getSampleData from "./chart/getSampleData.js";
 
 import { ReactGridHeatmap } from "./components/ReactGridHeatmap.jsx";
 
-function RootContainer({ serviceUrl, entity, config }) {
-    const [chartData, setChartData] = useState(null);
-    const [samples, setSamples] = useState(null);
-    const [features, setFeatures] = useState(null);
-    const [sources, setSources] = useState(null);
-    const [error, setError] = useState(null);
-
-    const [sourceIndex, setSourceIndex] = useState(0);
-
-    // DEBUG
-    const [response, setResponse] = useState(null);
-
+export default function RootContainer({ serviceUrl, entity, config }) {
     const featureIds = entity.value;
+    const [error, setError] = useState(null);
+    // overall data
+    const [response, setResponse] = useState(null);
+    const [sources, setSources] = useState(null);
+    const [features, setFeatures] = useState(null);
+    // per source data
+    const [source, setSource] = useState(null);
+    const [chartData, setChartData] = useState(null);
+    const [sampleData, setSampleData] = useState(null);
 
     // TIP: useEffect with empty array dependency only runs once!
     useEffect(() => {
         queryData(featureIds, serviceUrl)
             .then(response => {
+                var sources = getSources(response);
+                var features = getFeatures(response);
                 setResponse(response);
-                setChartData(getChartData(response));
-                setSamples(getSamples(response));
-                setFeatures(getFeatures(response));
-                setSources(getSources(response));
+                setSources(sources);
+                setFeatures(features);
             })
             .catch(() => {
                 setError("No expression data found!");
             });
     }, []);
 
+    // set the source and get its data
     function handleChange(event) {
-        setSourceIndex(event.target.value);
+        var i = event.target.value;
+        if (i < 0) {
+            setSource(null);
+            setChartData(null);
+            setSampleData(null);
+        } else {
+            setSource(sources[i]);
+            setChartData(getChartData(response, sources[i]));
+            setSampleData(getSampleData(response, sources[i]));
+        }
     }
 
     if (error) return (
@@ -49,25 +58,20 @@ function RootContainer({ serviceUrl, entity, config }) {
 
     return (
         <div className="rootContainer">
-            {(chartData && features && samples && sources) ? (
-                <div>
-                    <select name="source" value={sourceIndex} onChange={handleChange} style={{ 'margin-bottom': '5px' }}>
-                        {sources.map((source,i) => (
-                            <option key={i} value={i}>{source}</option>
-                        ))}
-                    </select>
-                    <ReactGridHeatmap samples={samples} features={features} data={chartData} />
-                </div>
-            ) : (
+            {sources && (
+                <select name="sourceIndex" onChange={handleChange} style={{ 'margin-bottom': '5px' }}>
+                    <option key={-1}>Select expression experiment</option>
+                    {sources.map((source,i) => (
+                        <option key={i} value={i}>{source}</option>
+                    ))}
+                </select>
+            )}
+            {(sources && features && source && sampleData && chartData) && (
+                <ReactGridHeatmap features={features} data={chartData} sampleData={sampleData} />
+            )}
+            {!sources && (
                 <Loader />
             )}
         </div>
     );
 }
-
-// need to export here for some reason
-export default RootContainer;
-
-                        // {chartData.datasets.map((dataset,i) => (
-                        //     <option key={i} value={i}>{dataset.source}</option>
-                        // ))}

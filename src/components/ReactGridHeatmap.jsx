@@ -20,15 +20,39 @@ import { HeatMapGrid } from 'react-grid-heatmap'
  * cursor: onClick ? 'pointer' : 'initial',
  * background: `rgb(12, 160, 44, ${ratio + 0.05})`,
  */
-export function ReactGridHeatmap({ samples, features, data }) {
+export function ReactGridHeatmap({ features, data, sampleData }) {
+    // build sample mouseover descriptions
+    const nums = sampleData.nums;
+    const names = sampleData.names;
+    const genotypes = sampleData.genotypes;
+    const tissues = sampleData.tissues;
+    const treatments = sampleData.treatments;
+    const descriptions = [];
+    for (var i=0; i<nums.length; i++) {
+        var description = names[i];
+        if (genotypes[i]) {
+            description = description + ":" + genotypes[i];
+        }
+        if (tissues[i]) {
+            description = description + ":" + tissues[i];
+        }
+        if (treatments[i]) {
+            description = description + ":" + treatments[i];
+        }
+        descriptions.push(description);
+    }
     return (
-        <div style={{ width: '100%' }}>
+        <div>
+            <div style={{ 'font-family':'sans-serif', 'font-size':'12px', 'font-style':'italic', 'padding-left':'80px' }}>
+                Mouse over cell to see data.
+            </div>
             <HeatMapGrid
                 data={data}
-                xLabels={samples}
+                xLabels={nums}
                 yLabels={features}
+                square = {true}
                 cellRender={(x, y, value) => (
-                    <div title={`${features[x]}|${samples[y]} = ${value} TPM`}>{value}</div>
+                    <div title={`${descriptions[y]} | ${features[x]} = ${value} TPM`}>{value}</div>
                 )}
                 xLabelsStyle={() => ({
                     fontFamily: 'sans-serif',
@@ -38,7 +62,7 @@ export function ReactGridHeatmap({ samples, features, data }) {
                 })}
                 yLabelsStyle={() => ({
                     fontFamily: 'sans-serif',
-                    fontSize: '10px',
+                    fontSize: '12px',
                     color: 'black',
                     borderRight: '1px solid black',
                 })}
@@ -48,10 +72,9 @@ export function ReactGridHeatmap({ samples, features, data }) {
                     border: '1px solid black',
                     borderRadius: '0',
                 })}
-                cellHeight='20px'
+                cellHeight='15px'
                 xLabelsPos='bottom'
                 yLabelsPos='left'
-                square = {false}
             />
         </div>
     );

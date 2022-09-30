@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RootContainer from './RootContainer.jsx';
+import RootContainer from './RootContainer.js';
 
 // make sure to export main, with the signature
 function main(el, service, imEntity, state, config) {

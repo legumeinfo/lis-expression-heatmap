@@ -26,7 +26,12 @@ const pathQuery = ({ featureIds }) => ({
 	'feature.name',
         'sample.num',
 	'sample.name',
-        'sample.source.primaryIdentifier'
+        'sample.description',
+        'sample.genotype',
+        'sample.tissue',
+        'sample.treatment',
+        'sample.replicateGroup',
+	'sample.source.primaryIdentifier'
     ],
     orderBy: [
         { path: 'sample.source.primaryIdentifier', direction: 'ASC' },
