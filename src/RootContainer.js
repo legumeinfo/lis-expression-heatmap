@@ -27,11 +27,9 @@ export default function RootContainer({ serviceUrl, entity, config }) {
     useEffect(() => {
         queryData(featureIds, serviceUrl)
             .then(response => {
-                var sources = getSources(response);
-                var features = getFeatures(response);
                 setResponse(response);
-                setSources(sources);
-                setFeatures(features);
+                setSources(getSources(response));
+                setFeatures(getFeatures(response));
             })
             .catch(() => {
                 setError("No expression data found!");
@@ -59,14 +57,17 @@ export default function RootContainer({ serviceUrl, entity, config }) {
     return (
         <div className="rootContainer">
             {sources && (
-		<div style={{ 'padding':'10px' }}>
+	        <div className="selector">
                     <select name="sourceIndex" onChange={handleChange}>
-                        <option key={-1}>Select expression experiment</option>
+                        <option key={-1} value={-1}>--- SELECT EXPRESSION EXPERIMENT ---</option>
                         {sources.map((source,i) => (
-                            <option key={i} value={i}>{source}</option>
+                            <option key={i} value={i}>{source.name}</option>
                         ))}
                     </select>
                 </div>
+            )}
+            {source && (
+                <div className="synopsis">{source.synopsis}</div>
             )}
             {(sources && features && source && sampleData && chartData) && (
 		<div style={{ 'padding':'10px' }}>

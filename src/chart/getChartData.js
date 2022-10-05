@@ -9,9 +9,9 @@ export default function getChartData(results, desiredSource) {
         const value = Number(result.value);
         const num = result.sample.num;
         const sample = result.sample.name;
-        const source = result.sample.source.primaryIdentifier;
+        const sourceName = result.sample.source.primaryIdentifier;
         const feature = result.feature.name;
-        if (source == desiredSource) {
+        if (sourceName == desiredSource.name) {
             if (feature != currentFeature) {
                 if (currentFeature != "") {
                     chartData.push(rowData); // previous feature row

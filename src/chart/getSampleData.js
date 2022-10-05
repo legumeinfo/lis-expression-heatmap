@@ -8,9 +8,9 @@ export default function getSampleData(results, desiredSource) {
     const tissues = [];
     const treatments = [];
     results.forEach(result => {
-        const source = result.sample.source.primaryIdentifier;
+        const sourceName = result.sample.source.primaryIdentifier;
         const num = result.sample.num;
-        if (source == desiredSource && !nums.includes(num)) {
+        if (sourceName == desiredSource.name && !nums.includes(num)) {
             nums.push(num);
             names.push(result.sample.name);
             genotypes.push(result.sample.genotype);
