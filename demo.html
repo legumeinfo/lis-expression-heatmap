@@ -12,8 +12,8 @@
     <script src="node_modules/imjs/dist/im.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
     <!-- These are styles that will be inherited from bluegenes -->
     <!-- <link rel="stylesheet" href="css/site.css"> -->
@@ -36,7 +36,7 @@
           var elem = document.getElementById('visualizer');
           // InterMine service, including URL and token.
     	  var imURL = {
-    	      root: 'https://lis.ncgr.org/cicermine'
+    	      root: 'https://mines.legumeinfo.org/phaseolusmine'
     	      //could include token here too if we had one
     	  };
     	  // this is an example of data that could be passed to this tool be BlueGenes
@@ -46,26 +46,24 @@
 	      Gene: {
 	          class: 'Gene',
 	          format: 'id',
-                  // an array of BeanMine genes with expression
+                  // an array of PhaseolusMine genes with expression
 	          value: [
-                      5609734,
-                      5613519,
-                      5614319,
-                      5634969,
-                      5639599,
-                      5650189,
-                      5654454,
-                      5661694,
-                      5663384,
-                      5690829,
-                      5705669,
-                      5707034,
-                      5726049,
-                      5736574,
-                      5737494,
-                      5749909,
-                      5750829,
-                      5751084
+                      32478969,
+                      32487182,
+                      32490285,
+                      32518313,
+                      32518333,
+                      32522162,
+                      32535429,
+                      32549014,
+                      32556650,
+                      32560888,
+                      32575046,
+                      32577383,
+                      32591575,
+                      32600714,
+                      32604395,
+                      32625824
                   ]
 	      }
           };

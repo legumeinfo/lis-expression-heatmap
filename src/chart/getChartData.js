@@ -1,6 +1,6 @@
 /**
  * Return an array of heatmap data for the desired source.
-*/
+ */
 export default function getChartData(results, desiredSource) {
     const chartData = [];
     var rowData = [];
