@@ -5,7 +5,6 @@ import CanvasXpressReact from 'canvasxpress-react';
 import Loader from './common/loader';
 import querySources from "./query/querySources.js";
 import querySampleDescriptions from "./query/querySampleDescriptions.js";
-import queryExpressionUnit from "./query/queryExpressionUnit.js";
 import queryExpressionData from "./query/queryExpressionData.js";
 import getData from "./chart/getData.js";
 
@@ -20,7 +19,6 @@ export default function RootContainer({ serviceUrl, entity, config }) {
     // data for chosen source
     const [source, setSource] = useState(null);
     const [sampleDescriptions, setSampleDescriptions] = useState(null);
-    const [expressionUnit, setExpressionUnit] = useState(null);
     const [data, setData] = useState(null);
 
     // canvasXpress config properties
@@ -103,19 +101,11 @@ export default function RootContainer({ serviceUrl, entity, config }) {
         var i = event.target.value;
         if (i < 0) {
             setSource(null);
-            setExpressionUnit(null);
             setSampleDescriptions(null);
             setData(null);
             evts = null;
         } else {
             setSource(sources[i]);
-            queryExpressionUnit(serviceUrl, sources[i])
-                .then(response => {
-                    setExpressionUnit(response);
-                })
-                .catch(() => {
-                    setError("Couldn't get expression unit for source "+sources[i].primaryIdentifier);
-                });
             querySampleDescriptions(serviceUrl, sources[i])
                 .then(response => {
                     setSampleDescriptions(response);
@@ -187,7 +177,7 @@ export default function RootContainer({ serviceUrl, entity, config }) {
             {source && data && (
                 <div>
                     <div className="synopsis">{source.synopsis}</div>
-                    <code>{ JSON.stringify(expressionUnit) }</code>
+                    <div className="expression-unit">Expression unit: TPM</div>
                     <div className="kmeans-selectors">
                         Sample K-means:
                         <select id="smps-km" value={smpsKm} onChange={selectSmpsKm}>
