@@ -1,0 +1,10 @@
+<query name=""
+       model="genomic"
+       view="ExpressionSource.bioProject
+             ExpressionSource.description
+             ExpressionSource.primaryIdentifier
+             ExpressionSource.sra
+             ExpressionSource.synopsis"
+       longDescription=""
+       sortOrder="ExpressionSource.primaryIdentifier asc">
+</query>

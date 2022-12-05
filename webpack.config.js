@@ -2,33 +2,39 @@ const path = require('path');
 const webpack = require('webpack'); //to access built-in plugins
 
 module.exports = {
-  mode: "production",
-  entry: './src/index.js',
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    library: "lisExpressionHeatmap",
-    libraryTarget: "var"
-  },
-  optimization: {
-    minimize: true
-	},
-	module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
-        }
-      }
-    ]
-	},
-	plugins: [
-		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-	],
-	externals: {
-		react: 'window.React',
-		'react-dom': 'window.ReactDOM'
-	}
+    mode: "production",
+    entry: './src/index.js',
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+        library: "lisExpressionHeatmap",
+        libraryTarget: "var"
+    },
+    optimization: {
+        minimize: true
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader"
+                }
+            },
+            {
+                test: /\.s?[ac]ss$/,
+                use: {
+                    loader: "css-loader"
+                }
+            }
+        ]
+    },
+    plugins: [
+	new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+    ],
+    externals: {
+	react: 'window.React',
+	'react-dom': 'window.ReactDOM'
+    }
 };

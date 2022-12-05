@@ -1,28 +1,29 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import Loader from './common/loader';
 import CanvasXpressReact from 'canvasxpress-react';
 
-import queryData from "./query/queryData.js";
-
-import getSources from "./chart/getSources.js";
-import getFeatures from "./chart/getFeatures.js";
-import getChartData from "./chart/getChartData.js";
-import getSampleData from "./chart/getSampleData.js";
+import Loader from './common/loader';
+import querySources from "./query/querySources.js";
+import querySampleDescriptions from "./query/querySampleDescriptions.js";
+import queryExpressionUnit from "./query/queryExpressionUnit.js";
+import queryExpressionData from "./query/queryExpressionData.js";
+import getData from "./chart/getData.js";
 
 export default function RootContainer({ serviceUrl, entity, config }) {
     const featureIds = entity.value;
     const [error, setError] = useState(null);
-    // overall data
-    const [response, setResponse] = useState(null);
+    const [graph, setGraph] = useState(null);
+    const [smpsKm, setSmpsKm] = useState(2);
+    const [varsKm, setVarsKm] = useState(2);
+    // all expression sources
     const [sources, setSources] = useState(null);
-    const [features, setFeatures] = useState(null);
-    // per source data
+    // data for chosen source
     const [source, setSource] = useState(null);
-    const [chartData, setChartData] = useState(null);
-    const [sampleData, setSampleData] = useState(null);
+    const [sampleDescriptions, setSampleDescriptions] = useState(null);
+    const [expressionUnit, setExpressionUnit] = useState(null);
+    const [data, setData] = useState(null);
 
-    // config properties
+    // canvasXpress config properties
     const heatmapIndicatorHeight = 50;
     const heatmapIndicatorWidth = 500;
     const varLabelScaleFontFactor = 1.2;
@@ -63,78 +64,150 @@ export default function RootContainer({ serviceUrl, entity, config }) {
         'smpLabelFontStyle': smpLabelFontStyle,
         'smpLabelRotate': smpLabelRotate,
         'smpTitleScaleFontFactor': smpTitleScaleFontFactor,
-        'kmeansSmpClusters': 2,
-        'kmeansVarClusters': 2,
+        'samplesKmeaned': true,
+        'variablesKmeaned': true,
+        'kmeansSmpClusters': smpsKm,
+        'kmeansVarClusters': varsKm,
         'linkage': 'complete',
-        'samplesClustered': false,
-        'variablesClustered': false,
-        'showSmpDendrogram': false,
-        'showVarDendrogram': false,
     }
 
     // TIP: useEffect with empty array dependency only runs once!
     useEffect(() => {
-        queryData(featureIds, serviceUrl)
+        querySources(serviceUrl)
             .then(response => {
-                setResponse(response);
-                setSources(getSources(response));
-                setFeatures(getFeatures(response));
+                setSources(response);
             })
             .catch(() => {
-                setError("No expression data found!");
+                setError("No expression experiments found.");
             });
     }, []);
 
+    // set the samples and variables k-means
+    useEffect(() => {
+        if (graph) {
+            graph.kmeansSamples(true);
+            graph.kmeansSmpClusters = smpsKm;
+            graph.kmeansVariables(true);
+            graph.kmeansVarClusters = varsKm;
+        }
+    });
+
+    // set the graph reference
+    function onRef(graph) {
+        setGraph(graph);
+    }
+
     // set the source and get its data
-    function handleChange(event) {
+    var evts = null;
+    function selectSource(event) {
         var i = event.target.value;
         if (i < 0) {
             setSource(null);
-            setChartData(null);
-            setSampleData({});
+            setExpressionUnit(null);
+            setSampleDescriptions(null);
+            setData(null);
+            evts = null;
         } else {
             setSource(sources[i]);
-            setChartData(getChartData(response, sources[i]));
-            setSampleData(getSampleData(response, sources[i]));
+            queryExpressionUnit(serviceUrl, sources[i])
+                .then(response => {
+                    setExpressionUnit(response);
+                })
+                .catch(() => {
+                    setError("Couldn't get expression unit for source "+sources[i].primaryIdentifier);
+                });
+            querySampleDescriptions(serviceUrl, sources[i])
+                .then(response => {
+                    setSampleDescriptions(response);
+                })
+                .catch(() => {
+                    setError("No samples found for expression source "+sources[i].primaryIdentifier);
+                });
+            queryExpressionData(serviceUrl, sources[i], featureIds)
+                .then(response => {
+                    setData(getData(response));
+                })
+                .catch(() => {
+                    setError("No expression data found in "+sources[i].primaryIdentifier+" for these genes.");
+                });
+
+            evts = {
+                "mousemove": function(o, e, t) {
+                    if (o.y && o.y.vars.length==1 && o.y.smps.length==1) {
+                        const value = o.y.data[0][0]+" TPM";
+                        t.showInfoSpan(e, value);
+                    } else if (o.y && o.y.smps.length==1) {
+                        const sample = o.y.smps[0];
+                        const s = sampleDescriptions[sample];
+                        t.showInfoSpan(e, s);
+                    } else if (o.y && o.y.vars.length==1) {
+                        const gene = o.y.vars[0];
+                        t.showInfoSpan(e, "we need the geneDescriptionMap"); // geneDescriptionMap.get(gene));
+                    }
+                },
+                "mouseout": function(o, e, t) {
+                },
+                "click": function(o, e, t) {
+                    // if (o.y && o.y.vars.length==1) {
+                    //     const gene = o.y.vars[0];
+                    //     const url = "/${WEB_ROPPERTIES['webapp.path']}/gene:"+genePrimaryIDMap.get(gene);
+                    //     window.open(url);
+                    // }
+                },
+                "dblclick": function(o, e, t) {
+                }
+            }
         }
+    }
+
+    function selectSmpsKm(event) {
+        setSmpsKm(event.target.value);
+    }
+
+    function selectVarsKm(event) {
+        setVarsKm(event.target.value);
     }
 
     if (error) return (
         <div className="rootContainer error">{ error }</div>
     );
 
-    const evts = {
-        "mousemove": function(o, e, t) {
-        },
-        "mouseout": function(o, e, t) {
-        },
-        "click": function(o, e, t) {
-        },
-        "dblclick": function(o, e, t) {
-        }
-    }
-    
-
     return (
         <div className="rootContainer">
             {sources && (
 	        <div className="selector">
-                    <select name="sourceIndex" onChange={handleChange}>
+                    <select name="sourceIndex" onChange={selectSource}>
                         <option key={-1} value={-1}>--- SELECT EXPRESSION EXPERIMENT ---</option>
                         {sources.map((source,i) => (
-                            <option key={i} value={i}>{source.name}</option>
+                            <option key={i} value={i}>{source.primaryIdentifier}</option>
                         ))}
                     </select>
                 </div>
             )}
-            {source && (
-                <div className="synopsis">{source.synopsis}</div>
-            )}
-            {sampleData && (
-                <code>{JSON.stringify(sampleData)}</code>
-            )}
-            {chartData && (
-                <code>{JSON.stringify(chartData)}</code>
+            {source && data && (
+                <div>
+                    <div className="synopsis">{source.synopsis}</div>
+                    <code>{ JSON.stringify(expressionUnit) }</code>
+                    <div className="kmeans-selectors">
+                        Sample K-means:
+                        <select id="smps-km" value={smpsKm} onChange={selectSmpsKm}>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        Gene K-means:
+                        <select id="vars-km" value={varsKm} onChange={selectVarsKm}>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div className="canvas">
+                        <CanvasXpressReact target={"canvas"} data={data} config={conf} events={evts} height={800} width={1150} onRef={onRef} />
+                    </div>
+                </div>
             )}
             {!sources && (
                 <Loader />
@@ -143,5 +216,17 @@ export default function RootContainer({ serviceUrl, entity, config }) {
     );
 }
 
-            // <i>Slide window with mouse; change scale with mouse wheel over axis; resize plot by dragging edges; select region to zoom in; click marker to see its page.</i>
-            // <CanvasXpressReact target={"canvas"} data={[]} config={conf} height={800} width={1150} events={evts} />
+
+// <i>Slide window with mouse; change scale with mouse wheel over axis; resize plot by dragging edges; select region to zoom in; click marker to see its page.</i>
+
+
+
+            // {sampleData && (
+            //     <code>{JSON.stringify(sampleData)}</code>
+            // )}
+            // {chartData && (
+            //     <code>{JSON.stringify(chartData)}</code>
+            // )}
+
+
+
