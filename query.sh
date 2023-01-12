@@ -5,7 +5,7 @@ FORMAT=$2
 #SERVER="mines.legumeinfo.org"
 SERVER="dev.lis.ncgr.org"
 
-MINE="phaseolusmine"
+MINE="minimine"
 
 URL="https://$SERVER/$MINE/service/query/results"
 

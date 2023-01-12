@@ -30,8 +30,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
@@ -39,8 +39,8 @@
     "@babel/preset-react": "^7.0.0",
     "@types/jest": "^24.0.13",
     "babel-loader": "^8.0.6",
-    "canvasxpress": "^41.2.6",
-    "canvasxpress-react": "^41.2.6",
+    "canvasxpress": "^41.3.4",
+    "canvasxpress-react": "^41.3.4",
     "chokidar": "^3.0.0",
     "css-loader": "^5.2.7",
     "eslint": "^5.16.0",

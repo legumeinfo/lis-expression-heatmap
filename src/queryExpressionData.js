@@ -33,6 +33,11 @@ const pathQuery = (source, featureIds) => ({
         { path: 'sample.name', direction: 'ASC' }
     ],
     where: [
+        {
+            path: 'sample.source.id',
+            op: '=',
+            value: source.objectId
+        },
 	{
 	    path: 'feature.id',
 	    op: 'ONE OF',

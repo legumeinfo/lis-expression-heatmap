@@ -1,15 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import CanvasXpressReact from 'canvasxpress-react';
-
 import Loader from './common/loader';
-import querySources from "./query/querySources.js";
-import querySampleDescriptions from "./query/querySampleDescriptions.js";
-import queryExpressionData from "./query/queryExpressionData.js";
-import getData from "./chart/getData.js";
+
+import querySources from "./querySources.js";
+import querySampleDescriptions from "./querySampleDescriptions.js";
+import queryExpressionData from "./queryExpressionData.js";
+import getData from "./getData.js";
 
 export default function RootContainer({ serviceUrl, entity, config }) {
     const featureIds = entity.value;
+    
     const [error, setError] = useState(null);
     const [graph, setGraph] = useState(null);
     const [smpsKm, setSmpsKm] = useState(2);
@@ -21,25 +22,6 @@ export default function RootContainer({ serviceUrl, entity, config }) {
     const [sampleDescriptions, setSampleDescriptions] = useState(null);
     const [data, setData] = useState(null);
 
-    // canvasXpress config properties
-    const heatmapIndicatorHeight = 50;
-    const heatmapIndicatorWidth = 500;
-    const varLabelScaleFontFactor = 1.2;
-    const varLabelFontColor = "black";
-    const varLabelFontStyle = "plain";
-    const varLabelRotate = 45;
-    const varTitleScaleFontFactor = 1.0;
-    const smpLabelScaleFontFactor = 1.2;
-    const smpLabelFontColor = "black";
-    const smpLabelFontStyle = "plain";
-    const smpLabelRotate = -45;
-    const smpTitleScaleFontFactor = 0.5;
-
-    // other constants
-    const min_cluster = 5;
-    const width_per_sample = 50;
-    const height_per_gene = 50;
-
     // the static CanvasXpress configuration
     const conf = {
         'graphType': 'Heatmap',
@@ -50,20 +32,24 @@ export default function RootContainer({ serviceUrl, entity, config }) {
         'heatmapCellBox': true,
         'heatmapIndicatorPosition': 'top',
         'heatmapIndicatorHistogram': false,
-        'heatmapIndicatorHeight': heatmapIndicatorHeight,
-        'heatmapIndicatorWidth': heatmapIndicatorWidth,
-        'varLabelScaleFontFactor': varLabelScaleFontFactor,
-        'varLabelFontColor': varLabelFontColor,
-        'varLabelFontStyle': varLabelFontStyle,
-        'varLabelRotate': varLabelRotate,
-        'varTitleScaleFontFactor': varTitleScaleFontFactor,
-        'smpLabelScaleFontFactor': smpLabelScaleFontFactor,
-        'smpLabelFontColor': smpLabelFontColor,
-        'smpLabelFontStyle': smpLabelFontStyle,
-        'smpLabelRotate': smpLabelRotate,
-        'smpTitleScaleFontFactor': smpTitleScaleFontFactor,
+        'heatmapIndicatorHeight': 50,
+        'heatmapIndicatorWidth': 500,
+        'varLabelScaleFontFactor': 1.2,
+        'varLabelFontColor': "black",
+        'varLabelFontStyle': "plain",
+        'varLabelRotate': 45,
+        'varTitleScaleFontFactor': 1.0,
+        'smpLabelScaleFontFactor': 1.2,
+        'smpLabelFontColor': "black",
+        'smpLabelFontStyle': "plain",
+        'smpLabelRotate': -45,
+        'smpTitleScaleFontFactor': 0.5,
         'samplesKmeaned': true,
         'variablesKmeaned': true,
+        'samplesClustered': false,
+        'variablesClustered': false,
+        'showSmpDendrogram': false,
+        'showVarDendrogram': false,
         'kmeansSmpClusters': smpsKm,
         'kmeansVarClusters': varsKm,
         'linkage': 'complete',
@@ -80,16 +66,16 @@ export default function RootContainer({ serviceUrl, entity, config }) {
             });
     }, []);
 
-    // set the samples and variables k-means
+    // force/update both axis k-means
     useEffect(() => {
         if (graph) {
-            graph.kmeansSamples(true);
             graph.kmeansSmpClusters = smpsKm;
-            graph.kmeansVariables(true);
             graph.kmeansVarClusters = varsKm;
+            graph.kmeansSamples(true);
+            graph.kmeansVariables(true);
         }
-    });
-
+    }, [graph, smpsKm, varsKm]);
+    
     // set the graph reference
     function onRef(graph) {
         setGraph(graph);
@@ -140,7 +126,7 @@ export default function RootContainer({ serviceUrl, entity, config }) {
                 "click": function(o, e, t) {
                     // if (o.y && o.y.vars.length==1) {
                     //     const gene = o.y.vars[0];
-                    //     const url = "/${WEB_ROPPERTIES['webapp.path']}/gene:"+genePrimaryIDMap.get(gene);
+                    //     const url = "/${WEB_PROPERTIES['webapp.path']}/gene:"+genePrimaryIDMap.get(gene);
                     //     window.open(url);
                     // }
                 },
@@ -150,6 +136,10 @@ export default function RootContainer({ serviceUrl, entity, config }) {
         }
     }
 
+    if (error) return (
+        <div className="rootContainer error">{ error }</div>
+    );
+
     function selectSmpsKm(event) {
         setSmpsKm(event.target.value);
     }
@@ -157,10 +147,6 @@ export default function RootContainer({ serviceUrl, entity, config }) {
     function selectVarsKm(event) {
         setVarsKm(event.target.value);
     }
-
-    if (error) return (
-        <div className="rootContainer error">{ error }</div>
-    );
 
     return (
         <div className="rootContainer">
@@ -177,7 +163,7 @@ export default function RootContainer({ serviceUrl, entity, config }) {
             {source && data && (
                 <div>
                     <div className="synopsis">{source.synopsis}</div>
-                    <div className="expression-unit">Expression unit: TPM</div>
+                    <div className="expression-unit">Expression unit: {source.unit}</div>
                     <div className="kmeans-selectors">
                         Sample K-means:
                         <select id="smps-km" value={smpsKm} onChange={selectSmpsKm}>
@@ -205,18 +191,4 @@ export default function RootContainer({ serviceUrl, entity, config }) {
         </div>
     );
 }
-
-
-// <i>Slide window with mouse; change scale with mouse wheel over axis; resize plot by dragging edges; select region to zoom in; click marker to see its page.</i>
-
-
-
-            // {sampleData && (
-            //     <code>{JSON.stringify(sampleData)}</code>
-            // )}
-            // {chartData && (
-            //     <code>{JSON.stringify(chartData)}</code>
-            // )}
-
-
 

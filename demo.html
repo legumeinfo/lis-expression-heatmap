@@ -12,8 +12,8 @@
     <script src="node_modules/imjs/dist/im.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
 
     <!-- These are styles that will be inherited from bluegenes -->
     <!-- <link rel="stylesheet" href="css/site.css"> -->
@@ -36,7 +36,7 @@
           var elem = document.getElementById('visualizer');
           // InterMine service, including URL and token.
     	  var imURL = {
-    	      root: 'https://mines.legumeinfo.org/phaseolusmine'
+    	      root: 'https://dev.lis.ncgr.org/minimine'
     	      //could include token here too if we had one
     	  };
     	  // this is an example of data that could be passed to this tool be BlueGenes
@@ -46,24 +46,35 @@
 	      Gene: {
 	          class: 'Gene',
 	          format: 'id',
-                  // an array of PhaseolusMine genes with expression
+                  // an array of genes with expression
 	          value: [
-                      32478969,
-                      32487182,
-                      32490285,
-                      32518313,
-                      32518333,
-                      32522162,
-                      32535429,
-                      32549014,
-                      32556650,
-                      32560888,
-                      32575046,
-                      32577383,
-                      32591575,
-                      32600714,
-                      32604395,
-                      32625824
+                      9795313,
+                      9808710,
+                      9813014,
+                      9720954,
+                      9780154,
+                      9751079,
+                      9805465,
+                      9773408,
+                      9669223,
+                      9760907,
+                      9745221,
+                      3478863,
+                      3475499,
+                      3478976,
+                      3625424,
+                      3547647,
+                      3503201,
+                      3591582,
+                      3488951,
+                      3533092,
+                      3546752,
+                      3522372,
+                      3616115,
+                      3589417,
+                      3476626,
+                      3501192,
+                      3546709
                   ]
 	      }
           };

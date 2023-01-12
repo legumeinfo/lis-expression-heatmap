@@ -18,11 +18,13 @@ export default function querySampleDescriptions(serviceUrl, source, imjsClient =
     });
 }
 
+// ExpressionSample.primaryIdentifier
 // ExpressionSample.name
 // ExpressionSample.description
 const pathQuery = (source) => ({
     from: 'ExpressionSample',
     select: [
+        'primaryIdentifier',
 	'name',
         'description'
     ],
